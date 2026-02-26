@@ -1,5 +1,7 @@
 package ru.job4j.bmb.service;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 import org.springframework.stereotype.Service;
 import ru.job4j.bmb.recommendation.RecommendationEngine;
 import ru.job4j.bmb.repository.MoodLogRepository;
@@ -8,4 +10,14 @@ import ru.job4j.bmb.repository.MoodLogRepository;
 public class MoodService {
     private RecommendationEngine recommendationEngine;
     private MoodLogRepository moodLogRepository;
+
+    @PostConstruct
+    public void init() {
+        System.out.println(getClass().getSimpleName() + " initialized");
+    }
+
+    @PreDestroy
+    public void destroy() {
+        System.out.println(getClass().getSimpleName() + " destroyed");
+    }
 }
