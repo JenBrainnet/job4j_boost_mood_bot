@@ -2,12 +2,14 @@ package ru.job4j.bmb.service;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
+import org.springframework.beans.factory.BeanNameAware;
 import org.springframework.stereotype.Service;
 import ru.job4j.bmb.repository.UserRepository;
 import ru.job4j.bmb.telegram.TelegramBotService;
 
 @Service
-public class ReminderService {
+public class ReminderService implements BeanNameAware {
+
     private TelegramBotService telegramBotService;
     private UserRepository userRepository;
 
@@ -19,5 +21,10 @@ public class ReminderService {
     @PreDestroy
     public void destroy() {
         System.out.println(getClass().getSimpleName() + " destroyed");
+    }
+
+    @Override
+    public void setBeanName(String name) {
+        System.out.println(getClass().getSimpleName() + " bean name: " + name);
     }
 }
