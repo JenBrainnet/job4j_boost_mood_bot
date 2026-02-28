@@ -14,4 +14,5 @@ public interface UserRepository extends CrudRepository<User, Long> {
     User findByClientId(Long clientId);
 
     User save(User user);
+
 }
