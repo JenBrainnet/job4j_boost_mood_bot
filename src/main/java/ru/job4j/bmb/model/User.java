@@ -1,10 +1,7 @@
 package ru.job4j.bmb.model;
 
-import org.springframework.stereotype.Component;
-
 import java.util.Objects;
 
-@Component
 public class User {
 
     private long id;
