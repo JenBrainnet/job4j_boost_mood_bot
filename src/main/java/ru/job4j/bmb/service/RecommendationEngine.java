@@ -1,7 +1,5 @@
 package ru.job4j.bmb.service;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.annotation.PreDestroy;
 import org.springframework.stereotype.Component;
 import ru.job4j.bmb.content.Content;
 import ru.job4j.bmb.content.ContentProvider;
@@ -17,16 +15,6 @@ public class RecommendationEngine {
 
     public RecommendationEngine(List<ContentProvider> contents) {
         this.contents = contents;
-    }
-
-    @PostConstruct
-    public void init() {
-        System.out.println(getClass().getSimpleName() + " initialized");
-    }
-
-    @PreDestroy
-    public void destroy() {
-        System.out.println(getClass().getSimpleName() + " destroyed");
     }
 
     public Content recommendFor(Long chatId, Long moodId) {

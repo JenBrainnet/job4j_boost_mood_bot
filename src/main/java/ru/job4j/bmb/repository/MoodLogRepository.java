@@ -11,4 +11,6 @@ public interface MoodLogRepository extends CrudRepository<MoodLog, Long> {
 
     List<MoodLog> findAll();
 
+    List<MoodLog> findByUserIdAndCreatedAtGreaterThanEqual(Long userId, long createdAt);
+
 }
