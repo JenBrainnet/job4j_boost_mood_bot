@@ -13,4 +13,6 @@ public interface AchievementRepository extends CrudRepository<Achievement, Long>
 
     List<Achievement> findByUserId(Long userId);
 
+    Achievement save(Achievement achievement);
+
 }
