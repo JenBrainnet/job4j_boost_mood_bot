@@ -5,17 +5,18 @@ import jakarta.annotation.PreDestroy;
 import org.springframework.beans.factory.BeanNameAware;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import ru.job4j.bmb.content.Content;
 import ru.job4j.bmb.repository.UserRepository;
+import ru.job4j.bmb.telegram.TelegramBotService;
 
 @Service
 public class ReminderService implements BeanNameAware {
 
-    private final TgRemoteService tgRemoteService;
+    private final TelegramBotService botService;
     private final UserRepository userRepository;
 
-    public ReminderService(TgRemoteService tgRemoteService, UserRepository userRepository) {
-        this.tgRemoteService = tgRemoteService;
+    public ReminderService(TelegramBotService botService, UserRepository userRepository) {
+        this.botService = botService;
         this.userRepository = userRepository;
     }
 
@@ -37,10 +38,9 @@ public class ReminderService implements BeanNameAware {
     @Scheduled(fixedRateString = "${remind.period}")
     public void ping() {
         for (var user : userRepository.findAll()) {
-            var message = new SendMessage();
-            message.setChatId(user.getChatId());
-            message.setText("Ping");
-            tgRemoteService.send(message);
+            Content content = new Content(user.getChatId());
+            content.setText("Ping");
+            botService.send(content);
         }
     }
 
