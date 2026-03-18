@@ -1,46 +1,46 @@
 package ru.job4j.bmb.service;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.annotation.PreDestroy;
-import org.springframework.beans.factory.BeanNameAware;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import ru.job4j.bmb.component.TgUI;
 import ru.job4j.bmb.content.Content;
-import ru.job4j.bmb.repository.UserRepository;
-import ru.job4j.bmb.telegram.TelegramBotService;
+import ru.job4j.bmb.content.SendContent;
+import ru.job4j.bmb.repository.MoodLogRepository;
+
+import java.time.LocalDate;
+import java.time.ZoneId;
 
 @Service
-public class ReminderService implements BeanNameAware {
+public class ReminderService {
 
-    private final TelegramBotService botService;
-    private final UserRepository userRepository;
+    private final SendContent sendContent;
+    private final MoodLogRepository moodLogRepository;
+    private final TgUI tgUI;
 
-    public ReminderService(TelegramBotService botService, UserRepository userRepository) {
-        this.botService = botService;
-        this.userRepository = userRepository;
+    public ReminderService(SendContent sendContent,
+                           MoodLogRepository moodLogRepository,
+                           TgUI tgUI) {
+        this.sendContent = sendContent;
+        this.moodLogRepository = moodLogRepository;
+        this.tgUI = tgUI;
     }
 
-    @PostConstruct
-    public void init() {
-        System.out.println(getClass().getSimpleName() + " initialized");
-    }
-
-    @PreDestroy
-    public void destroy() {
-        System.out.println(getClass().getSimpleName() + " destroyed");
-    }
-
-    @Override
-    public void setBeanName(String name) {
-        System.out.println(getClass().getSimpleName() + " bean name: " + name);
-    }
-
-    @Scheduled(fixedRateString = "${remind.period}")
-    public void ping() {
-        for (var user : userRepository.findAll()) {
-            Content content = new Content(user.getChatId());
-            content.setText("Ping");
-            botService.send(content);
+    @Scheduled(fixedRateString = "${recommendation.alert.period")
+    public void remindUsers() {
+        var startOfDay = LocalDate.now()
+                .atStartOfDay(ZoneId.systemDefault())
+                .toInstant()
+                .toEpochMilli();
+        var endOfDay = LocalDate.now()
+                .plusDays(1)
+                .atStartOfDay(ZoneId.systemDefault())
+                .toInstant()
+                .toEpochMilli() - 1;
+        for (var user : moodLogRepository.findUsersWhoDidNotVoteToday(startOfDay, endOfDay)) {
+            var content = new Content(user.getChatId());
+            content.setText("Как настроение?");
+            content.setMarkup(tgUI.buildButtons());
+            sendContent.send(content);
         }
     }
 

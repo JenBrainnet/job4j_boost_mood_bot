@@ -7,7 +7,7 @@ import ru.job4j.bmb.content.Content;
 import ru.job4j.bmb.model.User;
 import ru.job4j.bmb.repository.UserRepository;
 import ru.job4j.bmb.service.MoodService;
-import ru.job4j.bmb.service.TgUI;
+import ru.job4j.bmb.component.TgUI;
 
 import java.util.Optional;
 

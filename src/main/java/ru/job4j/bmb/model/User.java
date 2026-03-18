@@ -20,17 +20,17 @@ public class User {
     public User() {
     }
 
-    public User(long id, long clientId, long chatId) {
+    public User(Long id, long clientId, long chatId) {
         this.id = id;
         this.clientId = clientId;
         this.chatId = chatId;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -63,4 +63,5 @@ public class User {
     public int hashCode() {
         return Objects.hashCode(id);
     }
+
 }
